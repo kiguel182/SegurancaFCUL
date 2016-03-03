@@ -10,7 +10,6 @@ public class myWhats {
 	public static void main(String[] args) {
 		String user = null, passwd = null, serverPort = null;
 
-
 		serverPort = args[1];
 		String[] parts = serverPort.split(":");
 		String server = parts[0]; 
