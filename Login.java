@@ -24,6 +24,7 @@ public class Login {
 			System.out.println("File created");
 			BufferedWriter bw;
 			try {
+				
 				bw = new BufferedWriter(new FileWriter(file,true));
 				if(!existingUser(user,passwd,file)){
 					bw.write(user+ ":" + passwd);

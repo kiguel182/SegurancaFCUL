@@ -37,6 +37,7 @@ import java.net.Socket;
 				Login login = new Login(user, passwd);
 				login.autenthicator(user, passwd);
 				
+				
 				outStream.close();
 				inStream.close();
 				socket.close();
