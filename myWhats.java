@@ -1,8 +1,10 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
 
 
 public class myWhats {
@@ -48,12 +50,30 @@ public class myWhats {
 				break;
 			}
 
-
 			outStream.close();
 			socket.close();
 
 		}catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
+	}
+	
+	private void sendFile(File toSend, ObjectOutputStream out) throws IOException{
+		byte[] fileInByte = Files.readAllBytes(toSend.toPath());
+		out.writeInt(fileInByte.length);
+		byte[] envio = new byte[1024];
+		
+		int currentByte = 0;
+		for(int i = 0; i <= fileInByte.length/1024; i++){
+			for(int a = 0; a < 1024; a++){
+				if(currentByte < fileInByte.length){
+					envio[a] = fileInByte[currentByte];
+					currentByte++;
+				}
+			}
+			
+			out.writeObject(envio);
+			envio = new byte[1024];
+		}
 	}
 }
