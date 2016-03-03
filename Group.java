@@ -9,5 +9,12 @@ public class Group {
 		this.user = user;
 		this.group = group;
 	}
+	
+	public boolean addUser(String user, File Group) {
+		
+		boolean add = false;
+		
+		return false;
+	}
 
 }
