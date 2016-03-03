@@ -2,11 +2,7 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileInputStream;
 
 
 public class myWhats {
@@ -27,9 +23,28 @@ public class myWhats {
 				passwd = args[3];
 				serverPort = args[1];
 			}
-
+			
 			outStream.writeObject(user);
 			outStream.writeObject(passwd);
+			
+			switch(args[4]) {
+				case "-m":
+					break;
+					
+				case "-f":
+					break;
+				
+				case "-r":
+					break;
+					
+				case "-a":
+					break;
+					
+				default:
+					System.out.println("No viable command issued");
+					break;
+			}
+
 			
 			outStream.close();
 			socket.close();

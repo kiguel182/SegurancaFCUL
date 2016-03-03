@@ -40,7 +40,7 @@ public class Login {
 		}
 	}
 
-	private boolean existingUser(String user,String pwd,File file) throws IOException {
+	private boolean existingUser(String user, String pwd,File file) throws IOException {
 
 		
 		boolean existUser = false;
