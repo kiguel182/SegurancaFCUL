@@ -1,3 +1,10 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -46,4 +53,27 @@ import java.net.Socket;
 			}
 	}
 		
+		private void receive(ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+			//vai ter de receber nome primeiro antes de criar o ficheiro
+			File result = new File("result.txt");
+			int fileArraySize = inStream.readInt();
+			byte[] fullByteFile = new byte[fileArraySize];
+			int ciclos = fileArraySize/1024;
+			int currentByte = 0;
+			
+			for(int i = 0; i <= ciclos; i++){
+				byte[] receive = new byte[1024];
+				receive = (byte[]) inStream.readObject();
+				for(int a = 0; a < 1024; a++){
+					if(currentByte < fileArraySize){
+						fullByteFile[currentByte] = receive[a];
+						currentByte++;
+					}
+				}
+			}
+			
+			FileOutputStream stream = new FileOutputStream(result);
+			stream.write(fullByteFile);
+			stream.close();	
+		}
 }
