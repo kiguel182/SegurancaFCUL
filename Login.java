@@ -5,15 +5,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Login {
 
 	private String user;
 	private String pass;
+	private ArrayList atividades;
 
 	public Login(String user, String pass) {
 		this.user = user;
 		this.pass = pass;
+		this.atividades = new ArrayList();
 	}
 
 	void autenthicator(String user,String passwd) throws IOException{

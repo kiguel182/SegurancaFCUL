@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -34,8 +32,9 @@ public class myWhatsServer{
 		        e.printStackTrace();
 		    }
 		    
-		}	
+		}
+		
+		
 	}
-	
 	
 }

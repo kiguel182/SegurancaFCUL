@@ -1,5 +1,3 @@
-import java.io.File;
-
 public class Mensagem {
 	
 	private String contact;

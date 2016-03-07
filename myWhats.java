@@ -12,6 +12,7 @@ public class myWhats {
 	public static void main(String[] args) {
 		String user = null, passwd = null, serverPort = null;
 
+
 		serverPort = args[1];
 		String[] parts = serverPort.split(":");
 		String server = parts[0]; 
@@ -32,16 +33,35 @@ public class myWhats {
 			outStream.writeObject(passwd);
 
 			switch(args[4]) {
+
 			case "-m":
+				// Contact e Message
+				Mensagem m = new Mensagem(args[5], args[6]);
 				break;
 
 			case "-f":
+				// Para o contact args[5]
+				//sendFile(args[6], outStream);
 				break;
 
 			case "-r":
+				if(args[5]!=null) {
+					//FileDesc(ficheiro - ultimo enviado - lastOp
+				}
+				else {
+
+				}
 				break;
 
 			case "-a":
+				Group gAdd = new Group(args[6], args[0]);
+				gAdd.createGroup(args[6], args[0]);
+				gAdd.addUser(args[6], args[0], args[5]);
+				break;
+
+			case "-d":
+				Group gDel = new Group(args[6], args[0]);
+				gDel.deleteUser(args[6], args[0], args[5]);
 				break;
 
 			default:
@@ -54,14 +74,14 @@ public class myWhats {
 
 		}catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
-	
+
 	private void sendFile(File toSend, ObjectOutputStream out) throws IOException{
 		byte[] fileInByte = Files.readAllBytes(toSend.toPath());
 		out.writeInt(fileInByte.length);
 		byte[] envio = new byte[1024];
-		
+
 		int currentByte = 0;
 		for(int i = 0; i <= fileInByte.length/1024; i++){
 			for(int a = 0; a < 1024; a++){
@@ -70,7 +90,7 @@ public class myWhats {
 					currentByte++;
 				}
 			}
-			
+
 			out.writeObject(envio);
 			envio = new byte[1024];
 		}
