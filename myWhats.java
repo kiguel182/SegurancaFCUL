@@ -10,8 +10,8 @@ import java.nio.file.Files;
 public class myWhats {
 
 	public static void main(String[] args) {
+		
 		String user = null, passwd = null, serverPort = null;
-
 
 		serverPort = args[1];
 		String[] parts = serverPort.split(":");
@@ -37,36 +37,55 @@ public class myWhats {
 			case "-m":
 				outStream.writeObject("-m");
 				// Contact e Message
-				Mensagem m = new Mensagem(args[5], args[6]);
+				if(args[5] != null && args[6] != null) {
+					outStream.writeObject(args[5]);
+					outStream.writeObject(args[6]);
+				}
+				
 				break;
 
 			case "-f":
 				outStream.writeObject("-f");
-				// Para o contact args[5]
-				//sendFile(args[6], outStream);
+				
+				if(args[5] != null && args[6] != null) {
+					outStream.writeObject(args[5]);
+					outStream.writeObject(args[6]);
+				}
+				
 				break;
 
 			case "-r":
 				outStream.writeObject("-r");
-				if(args[5]!=null) {
-					//FileDesc(ficheiro - ultimo enviado - lastOp
+				
+				if(args[5]!= null) {
+					outStream.writeObject(args[5]);
+					
+					//cenas todas de uma pessoa Contact
 				}
 				else {
-
+					//apenas cenas mais recentes do servidor
 				}
+				
 				break;
 
 			case "-a":
 				outStream.writeObject("-a");
-				Group gAdd = new Group(args[6], args[0]);
-				gAdd.createGroup(args[6], args[0]);
-				gAdd.addUser(args[6], args[0], args[5]);
+				
+				if(args[5] != null && args[6] != null) {
+					outStream.writeObject("-a");
+					outStream.writeObject(args[6]);
+					outStream.writeObject(args[5]);
+				}
 				break;
 
 			case "-d":
 				outStream.writeObject("-d");
-				Group gDel = new Group(args[6], args[0]);
-				gDel.deleteUser(args[6], args[0], args[5]);
+				
+				if(args[5] != null && args[6] != null) {
+					outStream.writeObject(args[6]);
+					outStream.writeObject(args[5]);
+				}
+				
 				break;
 
 			default:

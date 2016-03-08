@@ -41,6 +41,95 @@ class ServerThread extends Thread {
 			/**
 			 * Ainda por completar
 			 */
+			
+			String command = null;
+			
+			try {
+				command = (String)inStream.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			switch(command) {
+
+			case "-m":
+				// Contact e Message
+				try {
+					String contact = (String) inStream.readObject();
+					String message = (String) inStream.readObject();
+					Mensagem m = new Mensagem(contact, message);
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+
+			case "-f":
+				
+				break;
+
+			case "-r":
+				
+				String contact = null;
+				
+				try {
+					contact = (String) inStream.readObject();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				if(contact != null) {
+					// operaçao conforme o contacto
+				}
+				
+				else {
+					//operaçao mais recente
+				}
+				
+				break;
+
+			case "-a":
+				
+				try {
+					String groupNameAdd = (String)inStream.readObject();
+					String contactAdd = (String)inStream.readObject();
+					
+					Group gAdd = new Group(groupNameAdd, contactAdd);
+					gAdd.createGroup(groupNameAdd, contactAdd);
+					gAdd.addUser(groupNameAdd, user, contactAdd);	
+					break;
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				break;
+
+			case "-d":
+				
+				try {
+					String groupNameDel = (String)inStream.readObject();
+					String contactDel = (String) inStream.readObject();
+					
+					Group gDel = new Group(groupNameDel, user);
+					gDel.deleteUser(groupNameDel, user, contactDel);
+					break;
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				break;
+
+			default:
+				System.out.println("No viable command issued");
+				break;
+			}	
 
 			outStream.close();
 			inStream.close();
