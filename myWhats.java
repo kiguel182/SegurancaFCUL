@@ -35,16 +35,19 @@ public class myWhats {
 			switch(args[4]) {
 
 			case "-m":
+				outStream.writeObject("-m");
 				// Contact e Message
 				Mensagem m = new Mensagem(args[5], args[6]);
 				break;
 
 			case "-f":
+				outStream.writeObject("-f");
 				// Para o contact args[5]
 				//sendFile(args[6], outStream);
 				break;
 
 			case "-r":
+				outStream.writeObject("-r");
 				if(args[5]!=null) {
 					//FileDesc(ficheiro - ultimo enviado - lastOp
 				}
@@ -54,12 +57,14 @@ public class myWhats {
 				break;
 
 			case "-a":
+				outStream.writeObject("-a");
 				Group gAdd = new Group(args[6], args[0]);
 				gAdd.createGroup(args[6], args[0]);
 				gAdd.addUser(args[6], args[0], args[5]);
 				break;
 
 			case "-d":
+				outStream.writeObject("-d");
 				Group gDel = new Group(args[6], args[0]);
 				gDel.deleteUser(args[6], args[0], args[5]);
 				break;
