@@ -10,7 +10,7 @@ public class Group {
 
 	private String groupName;
 	private String user;
-	private ArrayList atividades;
+	private ArrayList<Tuple<File, String>> atividades;
 
 	public Group(String groupName, String user) {
 		this.groupName = groupName;
@@ -101,7 +101,7 @@ public class Group {
 			System.out.println("Admin incorrecto");
 		}
 		else if(user.equals("admin:"+admin)){
-			System.out.println("Não é possível remover administradores");
+			System.out.println("Nï¿½o ï¿½ possï¿½vel remover administradores");
 		}
 
 		else {
@@ -128,6 +128,11 @@ public class Group {
 
 		br.close();
 
+	}
+	
+	private void addList(File file, String contact) {
+		Tuple<File, String> x = new Tuple<File, String>(file, contact);
+		atividades.add(x);
 	}
 
 }

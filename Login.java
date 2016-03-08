@@ -11,7 +11,7 @@ public class Login {
 
 	private String user;
 	private String pass;
-	private ArrayList atividades;
+	private ArrayList<Tuple<File, String>> atividades;
 
 	public Login(String user, String pass) {
 		this.user = user;
@@ -71,7 +71,11 @@ public class Login {
 		
 		}
 		return existUser;
-
 	}	
+	
+	private void addList(File file, String contact) {
+		Tuple<File, String> x = new Tuple<File, String>(file, contact);
+		atividades.add(x);
+	}
 
 }
