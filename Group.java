@@ -15,7 +15,7 @@ public class Group {
 	public Group(String groupName, String user) {
 		this.groupName = groupName;
 		this.user = user;
-		this.atividades = new ArrayList();
+		this.atividades = new ArrayList<Tuple<File, String>>();
 	}
 
 	void createGroup(String groupName,String user){
