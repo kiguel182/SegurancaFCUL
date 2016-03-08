@@ -29,7 +29,7 @@ public class Login {
 			try {
 				
 				bw = new BufferedWriter(new FileWriter(file,true));
-				if(!existingUser(user,passwd,file)){
+				if(!existingUser(user,passwd,file) && !userExists(user,file)){
 					bw.write(user+ ":" + passwd);
 					bw.newLine();
 				}
@@ -118,8 +118,9 @@ public class Login {
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean wrongPassword(String user,String pwd,File file) throws IOException{
-		return userExists(user,file) && !existingUser(user,pwd,file);
+	public boolean wrongPassword(String user,String passwd) throws IOException{
+		File file = new File("user.txt");
+		return userExists(user,file) && !existingUser(user,passwd,file);
 	}
 
 }
