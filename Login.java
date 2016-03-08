@@ -29,7 +29,7 @@ public class Login {
 			try {
 				
 				bw = new BufferedWriter(new FileWriter(file,true));
-				if(!existingUser(user,passwd,file)){
+				if(existingUser(user,passwd,file)){
 					bw.write(user+ ":" + passwd);
 					bw.newLine();
 				}
