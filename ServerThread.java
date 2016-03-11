@@ -68,6 +68,15 @@ class ServerThread extends Thread {
 
 			case "-f":
 				
+				try {
+					String contact = (String) inStream.readObject();
+					receive((ObjectInputStream) inStream.readObject());
+					
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				
 				break;
 
 			case "-r":
