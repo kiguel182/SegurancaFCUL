@@ -1,5 +1,12 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Mensagem {
 	
+	private static int inc = 1;
 	private String contact;
 	private String message;
 
@@ -8,19 +15,35 @@ public class Mensagem {
 		this.message = message;
 	}
 	
-	public boolean sendMessage(String contact, String message) {
+	public boolean sendMessage(String contact, String message) throws IOException {
 		
-		boolean send = false;
+		Boolean send = false;
 		
 		if(contact != null && message != null) {
 			
-			send = true;
+			if (!new File("\\user.txt").exists()) {
+			   throw new FileNotFoundException("File not found");
+			}
+			else {
+				
+				inc++;
+				File newFile = new File("fileName" + "inc" + ".txt");
+				
+				BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
+				bw.write(message);
+				
+				// buscar LOGIN no diretorio
+				Login l1 = new Login(contact , "null");
+				l1.userExists(contact, null);
+				
+				bw.close();
+				send = true;
+				
+			}
 		}
 		
 		return send;
 		
 	}
-	
-	
 
 }

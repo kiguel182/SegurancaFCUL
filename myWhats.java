@@ -28,7 +28,7 @@ public class myWhats {
 				user = args[0];
 				passwd = args[3];
 			}
-
+			
 			outStream.writeObject(user);
 			outStream.writeObject(passwd);
 
@@ -63,6 +63,8 @@ public class myWhats {
 					//cenas todas de uma pessoa Contact
 				}
 				else {
+					
+					
 					//apenas cenas mais recentes do servidor
 				}
 				

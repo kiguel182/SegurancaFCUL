@@ -118,7 +118,7 @@ public class Login {
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean wrongPassword(String user,String pwd,File file) throws IOException{
+	public boolean wrongPassword(String user, String pwd, File file) throws IOException{
 		return userExists(user,file) && !existingUser(user,pwd,file);
 	}
 	
