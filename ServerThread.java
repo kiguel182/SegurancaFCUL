@@ -60,6 +60,9 @@ class ServerThread extends Thread {
 					String message = (String) inStream.readObject();
 					Mensagem m = new Mensagem(contact, message);
 					
+					login.addString(message, contact);
+					//adicionar tambem po contact 
+					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -112,6 +115,7 @@ class ServerThread extends Thread {
 					Group gAdd = new Group(groupNameAdd, contactAdd);
 					gAdd.createGroup(groupNameAdd, contactAdd);
 					gAdd.addUser(groupNameAdd, user, contactAdd);	
+					
 					break;
 					
 				} catch (ClassNotFoundException e) {
