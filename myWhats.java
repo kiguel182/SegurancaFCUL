@@ -74,10 +74,10 @@ public class myWhats {
 				outStream.writeObject("-a");
 				
 				if(args[5] != null && args[6] != null) {
-					outStream.writeObject("-a");
 					outStream.writeObject(args[6]);
 					outStream.writeObject(args[5]);
 				}
+				
 				break;
 
 			case "-d":

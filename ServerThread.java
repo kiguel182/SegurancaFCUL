@@ -13,9 +13,6 @@ import java.net.Socket;
 class ServerThread extends Thread {
 
 	private Socket socket = null;
-	private static File lastOperation = null;
-	private static String userSend = null;
-	private static String contactTo = null;
 
 	public ServerThread(Socket inSoc) {
 		socket = inSoc;
@@ -40,7 +37,6 @@ class ServerThread extends Thread {
 
 			Login login = new Login(user, passwd);
 			login.autenthicator(user, passwd);
-			userSend = user;
 
 			String command = null;
 			
@@ -59,9 +55,7 @@ class ServerThread extends Thread {
 					String contact = (String) inStream.readObject();
 					String message = (String) inStream.readObject();
 					Mensagem m = new Mensagem(contact, message);
-					
-					login.addString(message, contact);
-					//adicionar tambem po contact 
+				
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -94,14 +88,11 @@ class ServerThread extends Thread {
 				}
 				
 				if(contact != null) {
-					contactTo = contact;
-					// operacao conforme o contacto
+					
 				}
 				
 				else {
 					
-					FileDesc description = new FileDesc(userSend, null, lastOperation);
-					//operacao mais recente
 				}
 				
 				break;

@@ -32,9 +32,8 @@ public class Mensagem {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
 				bw.write(message);
 				
-				// buscar LOGIN no diretorio
-				Login l1 = new Login(contact , "null");
-				l1.userExists(contact, null);
+				// POR FAZER  BUSCAR LOG
+				
 				
 				bw.close();
 				send = true;

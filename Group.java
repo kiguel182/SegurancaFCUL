@@ -10,12 +10,10 @@ public class Group {
 
 	private String groupName;
 	private String user;
-	private ArrayList<Tuple<File, String>> atividades;
 
 	public Group(String groupName, String user) {
 		this.groupName = groupName;
 		this.user = user;
-		this.atividades = new ArrayList<Tuple<File, String>>();
 	}
 
 	void createGroup(String groupName,String user){
@@ -128,11 +126,6 @@ public class Group {
 
 		br.close();
 
-	}
-	
-	private void addList(File file, String contact) {
-		Tuple<File, String> x = new Tuple<File, String>(file, contact);
-		atividades.add(x);
 	}
 
 }

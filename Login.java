@@ -11,12 +11,10 @@ public class Login {
 
 	private String user;
 	private String pass;
-	private ArrayList<Tuple<?, ?>> atividades;
 
 	public Login(String user, String pass) {
 		this.user = user;
 		this.pass = pass;
-		this.atividades = new ArrayList<Tuple<?, ?>>();
 	}
 
 	void autenthicator(String user,String passwd) throws IOException{
@@ -120,16 +118,6 @@ public class Login {
 	 */
 	public boolean wrongPassword(String user, String pwd, File file) throws IOException{
 		return userExists(user,file) && !existingUser(user,pwd,file);
-	}
-	
-	void addList(File file, String contact) {
-		Tuple<File, String> x = new Tuple<File, String>(file, contact);
-		atividades.add(x);
-	}
-	
-	void addString(String message, String contact) {
-		Tuple<String, String> x = new Tuple<String, String>(message, contact);
-		atividades.add(x);
 	}
 
 }
