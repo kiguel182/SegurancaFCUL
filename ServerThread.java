@@ -22,7 +22,7 @@ import java.net.Socket;
 				
 				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-				
+				System.out.println("nada");
 				String user = null;
 				String passwd = null;
 			
@@ -35,7 +35,7 @@ import java.net.Socket;
 				}
  			
 				Login login = new Login(user, passwd);
-				login.autenthicator(user, passwd);
+				System.out.println(login.wrongPassword(user, passwd));
 				
 				
 				outStream.close();

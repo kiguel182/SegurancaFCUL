@@ -30,24 +30,6 @@ public class myWhats {
 			outStream.writeObject(user);
 			outStream.writeObject(passwd);
 
-			switch(args[4]) {
-			case "-m":
-				break;
-
-			case "-f":
-				break;
-
-			case "-r":
-				break;
-
-			case "-a":
-				break;
-
-			default:
-				System.out.println("No viable command issued");
-				break;
-			}
-
 
 			outStream.close();
 			socket.close();
