@@ -16,7 +16,7 @@ public class Group {
 		this.user = user;
 	}
 
-	void createGroup(String groupName,String user){
+	void createGroup(String groupName, String user){
 
 		File file = new File(groupName + ".txt");
 		if(file.exists()){
@@ -39,7 +39,7 @@ public class Group {
 
 	}
 
-	void addUser(String groupFile,String admin,String user) throws IOException{
+	void addUser(String groupFile, String admin, String user) throws IOException{
 		String str = null;
 		File file = new File(groupFile + ".txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file,true));
@@ -63,7 +63,7 @@ public class Group {
 		bw.close();
 	}
 
-	private boolean isAdmin (File groupFile,String admin) throws IOException  {
+	private boolean isAdmin (File groupFile, String admin) throws IOException  {
 		String str = null;
 		BufferedReader br = new BufferedReader(new FileReader(groupFile));
 		str = br.readLine();
@@ -73,7 +73,7 @@ public class Group {
 
 	}
 
-	private boolean existingUserInGroup(File groupFile,String user) throws IOException {
+	private boolean existingUserInGroup(File groupFile, String user) throws IOException {
 		Boolean exists = false;
 		String str = null;
 		BufferedReader br = new BufferedReader(new FileReader(groupFile));
@@ -90,7 +90,7 @@ public class Group {
 		return exists;
 	}
 
-	void deleteUser(String groupFile,String admin,String user) throws IOException{
+	void deleteUser(String groupFile, String admin, String user) throws IOException{
 		String str = null;
 		File file = new File(groupFile + ".txt");				
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -99,7 +99,7 @@ public class Group {
 			System.out.println("Admin incorrecto");
 		}
 		else if(user.equals("admin:"+admin)){
-			System.out.println("N�o � poss�vel remover administradores");
+			System.out.println("Nao foi possivel remover administradores");
 		}
 
 		else {
