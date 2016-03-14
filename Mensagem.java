@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Mensagem {
-	
+
 	private static int inc = 1;
 	private String contact;
 	private String message;
@@ -14,35 +14,31 @@ public class Mensagem {
 		this.contact = contact;
 		this.message = message;
 	}
-	
+
 	public boolean sendMessage(String contact, String message) throws IOException {
-		
+
 		Boolean send = false;
-		
+
 		if(contact != null && message != null) {
+
+			// qql coisa deste genero e stuff
 			
-			if (!new File("\\user.txt").exists()) {
-			   throw new FileNotFoundException("File not found");
-			}
-			else {
-				
-				inc++;
-				File newFile = new File("fileName" + "inc" + ".txt");
-				
-				BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
-				bw.write(message);
-				
-				// POR FAZER  BUSCAR LOG
-				
-				
-				bw.close();
-				send = true;
-				
-			}
+			inc++;
+			File newFile = new File("fileName" + "inc" + ".txt");
+
+			BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
+			bw.write(message);
+
+			// POR FAZER  BUSCAR LOG
+
+
+			bw.close();
+			send = true;
+
 		}
-		
-		return send;
-		
-	}
+
+	return send;
+
+}
 
 }
