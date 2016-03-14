@@ -55,7 +55,7 @@ class ServerThread extends Thread {
 					String contact = (String) inStream.readObject();
 					String message = (String) inStream.readObject();
 					Mensagem m = new Mensagem(contact, message);
-				
+					m.addMessage();
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block

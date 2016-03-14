@@ -1,12 +1,14 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class Mensagem {
 
-	private static int inc = 1;
+	private static int inc = 0;
 	private String contact;
 	private String message;
 
@@ -15,30 +17,47 @@ public class Mensagem {
 		this.message = message;
 	}
 
-	public boolean sendMessage(String contact, String message) throws IOException {
+	public boolean addMessage() throws IOException {
 
 		Boolean send = false;
 
-		if(contact != null && message != null) {
+		if(userExists(this.contact) && this.message != null) {
 
-			// qql coisa deste genero e stuff
-			
-			inc++;
-			File newFile = new File("fileName" + "inc" + ".txt");
-
+			File newFile = new File("Mensagem" + inc + ".txt");
 			BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
 			bw.write(message);
-
-			// POR FAZER  BUSCAR LOG
-
-
+			Mensagem.inc++;
 			bw.close();
-			send = true;
 
+			send = true;
 		}
 
-	return send;
+		return send;
 
-}
+	}
+
+	public boolean userExists(String contact) throws IOException{
+		
+		boolean userExists = false;
+		String str = null;
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("user.txt"));
+			while((str = br.readLine()) != null){
+				String[] userF = str.split(":");
+				if(userF[0].equals(contact)){
+					userExists = true;
+				}
+			}
+			br.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return userExists;
+
+	}
 
 }
