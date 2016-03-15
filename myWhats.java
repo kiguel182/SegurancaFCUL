@@ -108,7 +108,7 @@ public class myWhats {
 	}
 
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
-		File toSend = new File(name + ".txt");
+		File toSend = new File(name);
 		byte[] fileInByte = Files.readAllBytes(toSend.toPath());
 		out.writeInt(fileInByte.length);
 		byte[] envio = new byte[1024];

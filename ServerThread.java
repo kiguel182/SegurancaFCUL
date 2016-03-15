@@ -156,7 +156,7 @@ class ServerThread extends Thread {
 
 	private void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
-		File result = new File(name + "txt");
+		File result = new File(name);
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
