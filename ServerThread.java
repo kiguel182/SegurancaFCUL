@@ -53,18 +53,23 @@ class ServerThread extends Thread {
 					String message = (String) inStream.readObject();
 					Mensagem m = new Mensagem(contact, message);
 					m.addMessage();
+					//writeLog(sender, reciever, timestamp, message)
+					//writeLog(user, contact, timestampCreate(), message);
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				break;
 
 			case "-f":
 				
 				try {
 					String contact = (String) inStream.readObject();
-					receive((ObjectInputStream) inStream.readObject());
+					String file = (String) inStream.readObject();
+					receive(file, (ObjectInputStream) inStream.readObject());
+					//writelog(user, contact, timestampCreate(), file);
 					
 				} catch (ClassNotFoundException e2) {
 					// TODO Auto-generated catch block
@@ -76,15 +81,22 @@ class ServerThread extends Thread {
 			case "-r":
 				
 				String contact = null;
+				String file = null;
 				
 				try {
 					contact = (String) inStream.readObject();
+					file = (String) inStream.readObject();
+					
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
-				if(contact != null) {
+				if(contact != null && file !=null) {
+					
+				}
+				
+				else if(contact != null){
 					
 				}
 				
@@ -100,11 +112,10 @@ class ServerThread extends Thread {
 					String groupNameAdd = (String)inStream.readObject();
 					String contactAdd = (String)inStream.readObject();
 					
-					Group gAdd = new Group(groupNameAdd, contactAdd);
-					gAdd.createGroup(groupNameAdd, contactAdd);
+					Group gAdd = new Group(groupNameAdd, user);
+					gAdd.createGroup(groupNameAdd, user);
 					gAdd.addUser(groupNameAdd, user, contactAdd);	
 					
-					break;
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -121,7 +132,6 @@ class ServerThread extends Thread {
 					
 					Group gDel = new Group(groupNameDel, user);
 					gDel.deleteUser(groupNameDel, user, contactDel);
-					break;
 					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -144,9 +154,9 @@ class ServerThread extends Thread {
 		}
 	}
 
-	private void receive(ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+	private void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
-		File result = new File("result.txt");
+		File result = new File(name + "txt");
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;

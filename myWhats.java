@@ -49,6 +49,7 @@ public class myWhats {
 				if(args[5] != null && args[6] != null) {
 					outStream.writeObject(args[5]);
 					outStream.writeObject(args[6]);
+					sendFile(args[6], outStream);
 				}
 				
 				break;
@@ -56,15 +57,19 @@ public class myWhats {
 			case "-r":
 				outStream.writeObject("-r");
 				
-				if(args[5]!= null) {
+				if(args[5]!= null && args[6] != null) {
 					outStream.writeObject(args[5]);
+					outStream.writeObject(args[6]);
 					
-					//cenas todas de uma pessoa Contact
 				}
+				else if(args[5] != null) {
+					
+					outStream.writeObject(args[5]);
+				
+				}
+				
 				else {
-					
-					
-					//apenas cenas mais recentes do servidor
+					System.out.println("Most recent");
 				}
 				
 				break;
@@ -102,7 +107,8 @@ public class myWhats {
 		} 
 	}
 
-	private void sendFile(File toSend, ObjectOutputStream out) throws IOException{
+	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
+		File toSend = new File(name + ".txt");
 		byte[] fileInByte = Files.readAllBytes(toSend.toPath());
 		out.writeInt(fileInByte.length);
 		byte[] envio = new byte[1024];

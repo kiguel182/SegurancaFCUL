@@ -92,39 +92,47 @@ public class Group {
 
 	void deleteUser(String groupFile, String admin, String user) throws IOException{
 		String str = null;
-		File file = new File(groupFile + ".txt");				
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		System.out.println("Admin:" + admin);
-		if(!isAdmin(file,admin)){
-			System.out.println("Admin incorrecto");
-		}
-		else if(user.equals("admin:"+admin)){
-			System.out.println("Nao foi possivel remover administradores");
+		File file = new File(groupFile + ".txt");		
+
+		if(!file.exists()) {
+			System.out.println("Ficheiro não existe");
 		}
 
 		else {
 
-			File fileTmp = new File(".tempFile.txt");
-			BufferedWriter bw = new BufferedWriter(new FileWriter(fileTmp));
-			while(!((str=br.readLine())==null)){
-				if(str.equals(admin)){
-					bw.write(str);
-					bw.newLine();
-					bw.newLine();
-				}
-				if(!str.equals(user)){
-					bw.write(str);
-					bw.newLine();
-				}
-
-
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			System.out.println("Admin:" + admin);
+			if(!isAdmin(file,admin)){
+				System.out.println("Admin incorrecto");
 			}
-			fileTmp.renameTo(file);
-			bw.close();
+			else if(user.equals("admin:"+admin)){
+				System.out.println("Nao foi possivel remover administradores");
+			}
+
+			else {
+
+				File fileTmp = new File(".tempFile.txt");
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileTmp));
+				while(!((str=br.readLine())==null)){
+					if(str.equals(admin)){
+						bw.write(str);
+						bw.newLine();
+						bw.newLine();
+					}
+					if(!str.equals(user)){
+						bw.write(str);
+						bw.newLine();
+					}
+
+
+				}
+				fileTmp.renameTo(file);
+				bw.close();
+			}
+
+			br.close();
 		}
 
-
-		br.close();
 
 	}
 
