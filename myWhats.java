@@ -9,7 +9,7 @@ import java.nio.file.Files;
 public class myWhats {
 
 	public static void main(String[] args) {
-		
+
 		String user = null, passwd = null, serverPort = null;
 
 		serverPort = args[1];
@@ -27,7 +27,7 @@ public class myWhats {
 				user = args[0];
 				passwd = args[3];
 			}
-			
+
 			outStream.writeObject(user);
 			outStream.writeObject(passwd);
 
@@ -40,58 +40,58 @@ public class myWhats {
 					outStream.writeObject(args[5]);
 					outStream.writeObject(args[6]);
 				}
-				
+
 				break;
 
 			case "-f":
 				outStream.writeObject("-f");
-				
+
 				if(args[5] != null && args[6] != null) {
 					outStream.writeObject(args[5]);
 					outStream.writeObject(args[6]);
 					sendFile(args[6], outStream);
 				}
-				
+
 				break;
 
 			case "-r":
 				outStream.writeObject("-r");
-				
+
 				if(args[5]!= null && args[6] != null) {
 					outStream.writeObject(args[5]);
 					outStream.writeObject(args[6]);
-					
+
 				}
 				else if(args[5] != null) {
-					
+
 					outStream.writeObject(args[5]);
-				
+
 				}
-				
+
 				else {
 					System.out.println("Most recent");
 				}
-				
+
 				break;
 
 			case "-a":
 				outStream.writeObject("-a");
-				
+
 				if(args[5] != null && args[6] != null) {
 					outStream.writeObject(args[6]);
 					outStream.writeObject(args[5]);
 				}
-				
+
 				break;
 
 			case "-d":
 				outStream.writeObject("-d");
-				
+
 				if(args[5] != null && args[6] != null) {
 					outStream.writeObject(args[6]);
 					outStream.writeObject(args[5]);
 				}
-				
+
 				break;
 
 			default:
@@ -108,17 +108,25 @@ public class myWhats {
 	}
 
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
-		File toSend = new File(name);
-		byte[] fileInByte = Files.readAllBytes(toSend.toPath());
-		out.writeInt(fileInByte.length);
-		byte[] envio = new byte[1024];
 
-		int currentByte = 0;
-		for(int i = 0; i <= fileInByte.length/1024; i++){
-			for(int a = 0; a < 1024; a++){
-				if(currentByte < fileInByte.length){
-					envio[a] = fileInByte[currentByte];
-					currentByte++;
+		File toSend = new File(name);
+
+		if(!toSend.exists()) {
+			System.out.println("File does not exist");
+		}
+		else {
+
+			byte[] fileInByte = Files.readAllBytes(toSend.toPath());
+			out.writeInt(fileInByte.length);
+			byte[] envio = new byte[1024];
+
+			int currentByte = 0;
+			for(int i = 0; i <= fileInByte.length/1024; i++){
+				for(int a = 0; a < 1024; a++){
+					if(currentByte < fileInByte.length){
+						envio[a] = fileInByte[currentByte];
+						currentByte++;
+					}
 				}
 			}
 
