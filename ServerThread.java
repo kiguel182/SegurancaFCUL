@@ -1,14 +1,11 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 class ServerThread extends Thread {
 
@@ -169,6 +166,15 @@ class ServerThread extends Thread {
 		FileOutputStream stream = new FileOutputStream(result);
 		stream.write(fullByteFile);
 		stream.close();	
+	}
+	
+	private String timestampCreate() {
+		
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		return sdf.format(date);
+		
 	}
 
 }
