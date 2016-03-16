@@ -20,7 +20,7 @@ public class Mensagem {
 	public File createMessage() throws IOException {
 
 		File newFile = null;
-
+		
 		if(userExists(this.contact) && this.message != null) {
 
 			newFile = new File("Mensagem" + inc + ".txt");
@@ -30,16 +30,16 @@ public class Mensagem {
 			bw.close();
 
 		}
-		
+
 		return newFile;
 
 	}
 
 	public boolean userExists(String contact) throws IOException{
-		
+
 		boolean userExists = false;
 		String str = null;
-		
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("user.txt"));
 			while((str = br.readLine()) != null){
@@ -49,7 +49,7 @@ public class Mensagem {
 				}
 			}
 			br.close();
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

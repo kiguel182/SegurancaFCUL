@@ -50,9 +50,10 @@ class ServerThread extends Thread {
 			case "-m":
 				// Contact e Message
 				try {
+					String contact = (String) inStream.readObject();
 					String name = (String) inStream.readObject();
-					receive(name, inStream);
-
+					receive(contact, name, inStream);
+					
 					//writeLog(fileName,sender, reciever, timestamp, message)
 					//writeLog(fileName, user, contact, timestampCreate(), message);
 
@@ -69,7 +70,7 @@ class ServerThread extends Thread {
 				try {
 					String contact = (String) inStream.readObject();
 					String file = (String) inStream.readObject();
-					receive(file, inStream);
+					receive(contact, file, inStream);
 					//writelog(FileName, user, contact, timestampCreate(), file);
 
 				} catch (ClassNotFoundException e2) {
@@ -157,9 +158,10 @@ class ServerThread extends Thread {
 		}
 	}
 
-	private void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+	private void receive(String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
-		File result = new File(name);
+		createDir(contact);
+		File result = new File(contact + File.separator + name);
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
@@ -180,7 +182,7 @@ class ServerThread extends Thread {
 		stream.write(fullByteFile);
 		stream.close();	
 	}
-	
+
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
 
 		File toSend = new File(name);
@@ -215,6 +217,14 @@ class ServerThread extends Thread {
 
 		return sdf.format(date);
 
+	}
+
+	private void createDir(String contact){
+		File theDir = new File(contact);
+		if(!theDir.exists()){
+			System.out.println("Creating directory");
+			theDir.mkdir();
+		}
 	}
 
 }

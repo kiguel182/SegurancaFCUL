@@ -46,6 +46,7 @@ public class myWhats {
 					if(args[5] != null && args[6] != null) {
 						Mensagem m = new Mensagem(args[5], args[6]);
 						File f = m.createMessage();
+						outStream.writeObject(args[5]);
 						outStream.writeObject(f.getName());
 						sendFile(f.getName(), outStream);
 					}
@@ -178,5 +179,13 @@ public class myWhats {
 		FileOutputStream stream = new FileOutputStream(result);
 		stream.write(fullByteFile);
 		stream.close();	
+	}
+	
+	private void createDir(String contact){
+		File theDir = new File(contact);
+		if(!theDir.exists()){
+			System.out.println("Creating directory");
+			theDir.mkdir();
+		}
 	}
 }
