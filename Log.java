@@ -66,8 +66,7 @@ public class Log {
 						timeStamp = str;
 					}
 					
-			
-					
+		
 				}
 				br.close();
 				System.out.println("-------");
