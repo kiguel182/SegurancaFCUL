@@ -201,10 +201,9 @@ class ServerThread extends Thread {
 						currentByte++;
 					}
 				}
+				out.writeObject(envio);
+				envio = new byte[1024];
 			}
-
-			out.writeObject(envio);
-			envio = new byte[1024];
 		}
 	}
 
