@@ -53,8 +53,8 @@ class ServerThread extends Thread {
 					String name = (String) inStream.readObject();
 					receive(name, inStream);
 
-					//writeLog(sender, reciever, timestamp, message)
-					//writeLog(user, contact, timestampCreate(), message);
+					//writeLog(fileName,sender, reciever, timestamp, message)
+					//writeLog(fileName, user, contact, timestampCreate(), message);
 
 
 				} catch (ClassNotFoundException e) {
@@ -70,7 +70,7 @@ class ServerThread extends Thread {
 					String contact = (String) inStream.readObject();
 					String file = (String) inStream.readObject();
 					receive(file, inStream);
-					//writelog(user, contact, timestampCreate(), file);
+					//writelog(FileName, user, contact, timestampCreate(), file);
 
 				} catch (ClassNotFoundException e2) {
 					// TODO Auto-generated catch block
