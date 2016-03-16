@@ -81,9 +81,9 @@ public class myWhats {
 						System.out.println("Most recent");
 					}
 
-					String fileName = null;
-
 					/*
+					String fileName = null;
+					
 					try {
 						fileName = (String) inStream.readObject();
 					} catch (ClassNotFoundException e) {
