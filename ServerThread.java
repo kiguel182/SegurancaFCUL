@@ -95,6 +95,7 @@ class ServerThread extends Thread {
 				}
 
 				if(contact != null && file !=null) {
+					outStream.writeObject(file);
 					sendFile(file, outStream);
 				}
 

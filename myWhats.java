@@ -80,6 +80,16 @@ public class myWhats {
 					else {
 						System.out.println("Most recent");
 					}
+					
+					String fileName = null;
+					
+					try {
+						fileName = (String) inStream.readObject();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					receive(fileName, inStream);
 
 					break;
 
@@ -113,6 +123,9 @@ public class myWhats {
 
 			}catch (IOException e) {
 				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} 
 		}
 	}
@@ -144,7 +157,7 @@ public class myWhats {
 		}
 	}
 	
-	private void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+	private static void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		File result = new File(name);
 		int fileArraySize = inStream.readInt();
