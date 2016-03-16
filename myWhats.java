@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,101 +11,110 @@ public class myWhats {
 
 	public static void main(String[] args) {
 
-		String user = null, passwd = null, serverPort = null;
+		if(args.length <= 0) {
+			System.out.println("Por favor introduza os argumentos necessarios");
+		}
 
-		serverPort = args[1];
-		String[] parts = serverPort.split(":");
-		String server = parts[0]; 
-		int port = Integer.parseInt(parts[1]);
+		else {
 
-		try {
-			Socket socket = new Socket(server, port);
+			String user = null, passwd = null, serverPort = null;
 
-			ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+			serverPort = args[1];
+			String[] parts = serverPort.split(":");
+			String server = parts[0]; 
+			int port = Integer.parseInt(parts[1]);
 
-			if(args[2].equals("-p")) {
-				user = args[0];
-				passwd = args[3];
-			}
+			try {
+				Socket socket = new Socket(server, port);
 
-			outStream.writeObject(user);
-			outStream.writeObject(passwd);
+				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
 
-			switch(args[4]) {
-
-			case "-m":
-				outStream.writeObject("-m");
-				// Contact e Message
-				if(args[5] != null && args[6] != null) {
-					outStream.writeObject(args[5]);
-					outStream.writeObject(args[6]);
+				if(args[2].equals("-p")) {
+					user = args[0];
+					passwd = args[3];
 				}
 
-				break;
+				outStream.writeObject(user);
+				outStream.writeObject(passwd);
 
-			case "-f":
-				outStream.writeObject("-f");
+				switch(args[4]) {
 
-				if(args[5] != null && args[6] != null) {
-					outStream.writeObject(args[5]);
-					outStream.writeObject(args[6]);
-					sendFile(args[6], outStream);
+				case "-m":
+					outStream.writeObject("-m");
+					// Contact e Message
+					if(args[5] != null && args[6] != null) {
+						Mensagem m = new Mensagem(args[5], args[6]);
+						File f = m.createMessage();
+						outStream.writeObject(f.getName());
+						sendFile(f.getName(), outStream);
+					}
+
+					break;
+
+				case "-f":
+					outStream.writeObject("-f");
+
+					if(args[5] != null && args[6] != null) {
+						outStream.writeObject(args[5]);
+						outStream.writeObject(args[6]);
+						sendFile(args[6], outStream);
+					}
+
+					break;
+
+				case "-r":
+					outStream.writeObject("-r");
+
+					if(args[5]!= null && args[6] != null) {
+						outStream.writeObject(args[5]);
+						outStream.writeObject(args[6]);
+
+					}
+					else if(args[5] != null) {
+
+						outStream.writeObject(args[5]);
+
+					}
+
+					else {
+						System.out.println("Most recent");
+					}
+
+					break;
+
+				case "-a":
+					outStream.writeObject("-a");
+
+					if(args[5] != null && args[6] != null) {
+						outStream.writeObject(args[6]);
+						outStream.writeObject(args[5]);
+					}
+
+					break;
+
+				case "-d":
+					outStream.writeObject("-d");
+
+					if(args[5] != null && args[6] != null) {
+						outStream.writeObject(args[6]);
+						outStream.writeObject(args[5]);
+					}
+
+					break;
+
+				default:
+					System.out.println("No viable command issued");
+					break;
 				}
 
-				break;
+				outStream.close();
+				socket.close();
 
-			case "-r":
-				outStream.writeObject("-r");
-
-				if(args[5]!= null && args[6] != null) {
-					outStream.writeObject(args[5]);
-					outStream.writeObject(args[6]);
-
-				}
-				else if(args[5] != null) {
-
-					outStream.writeObject(args[5]);
-
-				}
-
-				else {
-					System.out.println("Most recent");
-				}
-
-				break;
-
-			case "-a":
-				outStream.writeObject("-a");
-
-				if(args[5] != null && args[6] != null) {
-					outStream.writeObject(args[6]);
-					outStream.writeObject(args[5]);
-				}
-
-				break;
-
-			case "-d":
-				outStream.writeObject("-d");
-
-				if(args[5] != null && args[6] != null) {
-					outStream.writeObject(args[6]);
-					outStream.writeObject(args[5]);
-				}
-
-				break;
-
-			default:
-				System.out.println("No viable command issued");
-				break;
-			}
-
-			outStream.close();
-			socket.close();
-
-		}catch (IOException e) {
-			e.printStackTrace();
-		} 
+			}catch (IOException e) {
+				e.printStackTrace();
+			} 
+		}
 	}
 
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
@@ -133,5 +143,29 @@ public class myWhats {
 			out.writeObject(envio);
 			envio = new byte[1024];
 		}
+	}
+	
+	private void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+		//vai ter de receber nome primeiro antes de criar o ficheiro
+		File result = new File(name);
+		int fileArraySize = inStream.readInt();
+		byte[] fullByteFile = new byte[fileArraySize];
+		int ciclos = fileArraySize/1024;
+		int currentByte = 0;
+
+		for(int i = 0; i <= ciclos; i++){
+			byte[] receive = new byte[1024];
+			receive = (byte[]) inStream.readObject();
+			for(int a = 0; a < 1024; a++){
+				if(currentByte < fileArraySize){
+					fullByteFile[currentByte] = receive[a];
+					currentByte++;
+				}
+			}
+		}
+
+		FileOutputStream stream = new FileOutputStream(result);
+		stream.write(fullByteFile);
+		stream.close();	
 	}
 }

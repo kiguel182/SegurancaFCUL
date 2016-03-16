@@ -17,22 +17,21 @@ public class Mensagem {
 		this.message = message;
 	}
 
-	public boolean addMessage() throws IOException {
+	public File createMessage() throws IOException {
 
-		Boolean send = false;
+		File newFile = null;
 
 		if(userExists(this.contact) && this.message != null) {
 
-			File newFile = new File("Mensagem" + inc + ".txt");
+			newFile = new File("Mensagem" + inc + ".txt");
 			BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
 			bw.write(message);
 			Mensagem.inc++;
 			bw.close();
 
-			send = true;
 		}
-
-		return send;
+		
+		return newFile;
 
 	}
 
