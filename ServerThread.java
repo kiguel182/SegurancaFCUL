@@ -162,6 +162,7 @@ class ServerThread extends Thread {
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		createDir(contact);
 		File result = new File(contact + File.separator + name);
+		
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
