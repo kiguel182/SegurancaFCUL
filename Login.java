@@ -21,17 +21,18 @@ public class Login {
 		if(user != null && passwd != null) {
 
 			File file = new File("user.txt");
-			System.out.println("File created");
 			BufferedWriter bw;
+
 			try {
-				
+
 				bw = new BufferedWriter(new FileWriter(file,true));
 				if(!existingUser(user,passwd,file)){
 					bw.write(user+ ":" + passwd);
 					bw.newLine();
 				}
-				else
+				else {
 					System.out.println("User already exists");
+				}
 
 				bw.close();
 
@@ -51,16 +52,16 @@ public class Login {
 	 */
 	private boolean existingUser(String user, String pwd,File file) throws IOException {
 
-		
+
 		boolean existUser = false;
-		
+
 		if(user != null && pwd != null) {
-			
+
 			String str = null;
 			String line = user + ":" + pwd;
-			
+
 			try {
-				
+
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				while((str = br.readLine())!= null){
 					if(str.equals(line)){
@@ -69,11 +70,11 @@ public class Login {
 					}
 				}
 				br.close();
-				
+
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		
+
 		}
 		return existUser;
 
@@ -101,9 +102,9 @@ public class Login {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return userExists;
-		
+
 	}
 	/**
 	 * Metodo que verifica 

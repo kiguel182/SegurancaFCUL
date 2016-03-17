@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 public class Mensagem {
 
-	private static int inc = 0;
 	private String contact;
 	private String message;
 
@@ -22,11 +22,13 @@ public class Mensagem {
 		File newFile = null;
 		
 		if(userExists(this.contact) && this.message != null) {
+			
+			Date now = new Date();
 
-			newFile = new File("Mensagem" + inc + ".txt");
-			BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
+			newFile = new File(now.getTime() + ".txt");
+			BufferedWriter bw = new BufferedWriter(new FileWriter(newFile));
 			bw.write(message);
-			Mensagem.inc++;
+			
 			bw.close();
 
 		}
