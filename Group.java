@@ -16,7 +16,7 @@ public class Group {
 		this.user = user;
 	}
 
-	void createGroup(String groupName, String user){
+	void createGroup(String groupName,String user){
 
 		File file = new File(groupName + ".txt");
 		if(file.exists()){
@@ -39,31 +39,34 @@ public class Group {
 
 	}
 
-	void addUser(String groupFile, String admin, String user) throws IOException{
+	void addUser(String groupFile,String admin,String user) throws IOException{
 		String str = null;
 		File file = new File(groupFile + ".txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file,true));
 
-
-
-		if(!isAdmin(file,admin)){
-			System.out.println("Admin incorrecto");
+		if(!file.exists()){
+			System.out.println("No such file");
 		}
 		else {
-			if(!existingUserInGroup(file,user)){
-				bw.write(user);
-				bw.newLine();
+			if(!isAdmin(file,admin)){
+				System.out.println("Admin incorrecto");
 			}
 			else {
-				System.out.println("User exists");
-			}
+				if(!existingUserInGroup(file,user)){
+					bw.write(user);
+					bw.newLine();
+				}
+				else {
+					System.out.println("User exists");
+				}
 
+			}
 		}
 
 		bw.close();
 	}
 
-	private boolean isAdmin (File groupFile, String admin) throws IOException  {
+	private boolean isAdmin (File groupFile,String admin) throws IOException  {
 		String str = null;
 		BufferedReader br = new BufferedReader(new FileReader(groupFile));
 		str = br.readLine();
@@ -73,7 +76,7 @@ public class Group {
 
 	}
 
-	private boolean existingUserInGroup(File groupFile, String user) throws IOException {
+	private boolean existingUserInGroup(File groupFile,String user) throws IOException {
 		Boolean exists = false;
 		String str = null;
 		BufferedReader br = new BufferedReader(new FileReader(groupFile));
@@ -90,50 +93,43 @@ public class Group {
 		return exists;
 	}
 
-	void deleteUser(String groupFile, String admin, String user) throws IOException{
+	void deleteUser(String groupFile,String admin,String user) throws IOException{
 		String str = null;
-		File file = new File(groupFile + ".txt");		
+		File file = new File(groupFile + ".txt");	
 
 		if(!file.exists()) {
-			System.out.println("Ficheiro não existe");
+			System.out.println("Ficheiro nao existe");
 		}
 
 		else {
 
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			System.out.println("Admin:" + admin);
+			
 			if(!isAdmin(file,admin)){
 				System.out.println("Admin incorrecto");
 			}
 			else if(user.equals("admin:"+admin)){
-				System.out.println("Nao foi possivel remover administradores");
+				System.out.println("Nai foi possivel remover administradores");
 			}
 
 			else {
+				StringBuilder sb = new StringBuilder();
 
-				File fileTmp = new File(".tempFile.txt");
-				BufferedWriter bw = new BufferedWriter(new FileWriter(fileTmp));
-				while(!((str=br.readLine())==null)){
-					if(str.equals(admin)){
-						bw.write(str);
-						bw.newLine();
-						bw.newLine();
-					}
-					if(!str.equals(user)){
-						bw.write(str);
-						bw.newLine();
-					}
+				while((str = br.readLine()) != null){
 
+					if(!(str.equals(user))){
+						sb.append(str);
+						sb.append("\n");
+					}
 
 				}
-				fileTmp.renameTo(file);
+				br.close();
+				BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+				bw.write(sb.toString());
 				bw.close();
 			}
 
-			br.close();
 		}
-
-
 	}
 
 }
