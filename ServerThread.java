@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,10 +56,9 @@ class ServerThread extends Thread {
 					String contact = (String) inStream.readObject();
 					String name = (String) inStream.readObject();
 					receive(user, contact, name, inStream);
-					
-					//writeLog(fileName,sender, reciever, timestamp, message)
-					//writeLog(fileName, user, contact, timestampCreate(), message);
-
+					Log l = new Log();
+					String m = createString(new File(user + "-" + contact + File.separator + name));
+					l.writeLog(name, user, contact, timestampCreate(), m);
 
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -71,7 +73,8 @@ class ServerThread extends Thread {
 					String contact = (String) inStream.readObject();
 					String file = (String) inStream.readObject();
 					receive(contact, file, inStream);
-					//writelog(FileName, user, contact, timestampCreate(), file);
+					Log l = new Log();
+					l.writeLog(file, user, contact, timestampCreate(), file);
 
 				} catch (ClassNotFoundException e2) {
 					// TODO Auto-generated catch block
@@ -98,6 +101,8 @@ class ServerThread extends Thread {
 				if(contact != null && file !=null) {
 					outStream.writeObject(file);
 					sendFile(contact + File.separator + file, outStream);
+					Log l = new Log();
+					l.writeLog(file, user, contact, timestampCreate(), file);
 				}
 
 				else if(contact != null){
@@ -276,6 +281,21 @@ class ServerThread extends Thread {
 		}
 		
 		return dirCreated;
+		
+	}
+	
+	private String createString(File file) throws IOException {
+		
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		
+		String str;
+		while((str = br.readLine())!= null) {
+			// Se houver mais do que 1 linha, ira criar um tab
+			sb.append(str + "\t");
+		}
+		
+		return sb.toString();
 		
 	}
 
