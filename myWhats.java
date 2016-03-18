@@ -34,6 +34,9 @@ public class myWhats {
 					user = args[0];
 					passwd = args[3];
 				}
+				else {
+					
+				}
 
 				outStream.writeObject(user);
 				outStream.writeObject(passwd);

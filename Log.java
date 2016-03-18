@@ -11,15 +11,15 @@ import java.util.List;
 
 
 public class Log {
-	
-	
+
+
 	public void writeLog(String fileName,String sender,String receiver,String timeStamp,String message) throws IOException{
 		writeLogSender(fileName,sender,receiver,timeStamp,message);
 		writeLogReceiver(fileName,sender,receiver,timeStamp,message);
 		writeContacts(sender, receiver);
 		writeContacts(receiver,receiver);
 	}
-	
+
 	private void createDir(){
 		File theDir = new File("Log");
 		if(!theDir.exists()){
@@ -35,7 +35,7 @@ public class Log {
 	 * @param timeStamp
 	 * @param message
 	 */
-	
+
 	private void writeLogSender(String fileName,String sender,String receiver,String timeStamp,String message){
 		createDir();
 		String path = "Log" + File.separator + "log"+sender+".txt";
@@ -57,7 +57,7 @@ public class Log {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 	}
 	/**
 	 * Method to write log for the receiver of the message
@@ -89,8 +89,8 @@ public class Log {
 			e1.printStackTrace();
 		}	
 	}
-	
-	
+
+
 	/**
 	 * Auxiliary method to save all contacts
 	 * @param user 
@@ -107,16 +107,16 @@ public class Log {
 			if(str.equals(contact))
 				isThere = true;
 		}
-		
+
 		if(!isThere){
 			bw.write(contact);
 			bw.newLine();
 		}
-			
+
 		br.close();
 		bw.close();
-		
-		
+
+
 	}
 
 	/**
@@ -127,13 +127,13 @@ public class Log {
 	 * @throws FileNotFoundException
 	 */
 	public void readLogContact(String user,String requestedUser) throws FileNotFoundException{
-		
+
 		File file = new File("Log/"+"log"+requestedUser+".txt");
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		StringBuilder recent = new StringBuilder();
 		String str = null;
-		
-		
+
+
 		try {
 			while((str = br.readLine())!= null){
 				if(str.contains("Info")){
@@ -159,9 +159,9 @@ public class Log {
 			e.printStackTrace();
 		}
 		System.out.println(recent.toString());
-		
+
 	}
-	
+
 	/**
 	 * -r 	
 	 * @param user logged user
@@ -183,7 +183,7 @@ public class Log {
 					tmp.append(str);
 					if(!str.contains("TimeStamp:"))
 						tmp.append("||");
-				
+
 				}
 				else {
 					logArray.add(tmp.toString());
@@ -196,36 +196,30 @@ public class Log {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(logArray.toString());
+
 		Collections.reverse(logArray);
-		System.out.println(logArray.toString());
+
 		try {
 			while((str = brContact.readLine())!= null){
-					contactArray.add(str);
+				contactArray.add(str);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(contactArray.toString());
-	
+
 		for(int i = 0; i < contactArray.size();i++){
 			for(int j = 0; j < logArray.size();j++){
 				if(logArray.get(j).contains("Contact:"+contactArray.get(i)+"||")){
 					recentLog.add(logArray.get(j));
 					break;
 				}
-				
-					
+
+
 			}
 		}
-		
-		for(int i = 0; i < recentLog.size(); i++){
-			System.out.println(recentLog.get(i));
-		}
-		
+
 	}
-	
-	
-	
+
+
 }
