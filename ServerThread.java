@@ -101,11 +101,11 @@ class ServerThread extends Thread {
 				}
 
 				else if(contact != null){
-					//log.read -- por fazer --();
+					log.readLogContact(user, contact);
 				}
 
 				else {
-					log.readAllRecent();
+					log.readRecent(user);
 				}
 
 				break;
@@ -118,6 +118,7 @@ class ServerThread extends Thread {
 
 					Group gAdd = new Group(groupNameAdd, user);
 					gAdd.createGroup(groupNameAdd, user);
+					createDir(groupNameAdd);
 					gAdd.addUser(groupNameAdd, user, contactAdd);	
 
 
