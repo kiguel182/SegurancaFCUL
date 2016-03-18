@@ -97,7 +97,7 @@ class ServerThread extends Thread {
 
 				if(contact != null && file !=null) {
 					outStream.writeObject(file);
-					sendFile(file, outStream);
+					sendFile(contact + File.separator + file, outStream);
 				}
 
 				else if(contact != null){
@@ -107,6 +107,7 @@ class ServerThread extends Thread {
 				else {
 					log.readRecent(user);
 				}
+				
 
 				break;
 
@@ -187,12 +188,13 @@ class ServerThread extends Thread {
 	
 	private void receive(String user, String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
-		String str = createDirMessage(user, contact);
+		Boolean str = createDirMessage(user, contact);
 		File result = null;
 		
-		
+		if(str)
 			result = new File(user + "-" + contact + File.separator + name);
-		
+		else 
+			result = new File(contact + "-" + user + File.separator + name);
 		
 		
 		int fileArraySize = inStream.readInt();
@@ -210,7 +212,7 @@ class ServerThread extends Thread {
 				}
 			}
 		}
-
+		System.out.println(result.toString());
 		FileOutputStream stream = new FileOutputStream(result);
 		stream.write(fullByteFile);
 		stream.close();	
@@ -260,18 +262,20 @@ class ServerThread extends Thread {
 		}
 	}
 	
-	private String createDirMessage(String user, String contact){
-		
-		File theUserCon = new File(user + "-" + contact);
-		if(theUserCon.toString().equals(contact+"-"+user)){
-			System.out.println("Directororoia com inversa");
+	private Boolean createDirMessage(String user, String contact){
+		boolean dirCreated = false;
+		File theUserCon = null;
+		if(new File(contact + "-" + user).exists()){
+			System.out.println("Directoria inversa");
+			
 		}
-		if(!theUserCon.exists()){
-			System.out.println("Creating directory");
+		else {
+			theUserCon = new File(user + "-" + contact);
 			theUserCon.mkdir();
+			dirCreated = true;
 		}
 		
-		return theUserCon.toString();
+		return dirCreated;
 		
 	}
 

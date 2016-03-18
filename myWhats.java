@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class myWhats {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 
 		if(args.length <= 0) {
 			System.out.println("Por favor introduza os argumentos necessarios");
@@ -27,122 +27,26 @@ public class myWhats {
 
 			try {
 				Socket socket = new Socket(server, port);
-
 				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-
+				user = args[0];
 				if(args[2].equals("-p")) {
-					user = args[0];
 					passwd = args[3];
+					outStream.writeObject(user);
+					outStream.writeObject(passwd);
+					options(0,args,outStream,inStream);
 				}
-				/*else {
+				
+				else {
 					System.out.println("Escreva a sua password");
-
 					Scanner sc = new Scanner(System.in);
 					passwd = sc.next();
+					
+					outStream.writeObject(user);
+					outStream.writeObject(passwd);
+					options(2,args,outStream,inStream);
 					sc.close();
-
-					for(int i = 2; i < args.length + 2; i++){
-						
-						args[i + 2] = args[i];
-						
-						if(i == 2) {
-							args[i] = "-p";
-						}
-						if(i == 3) {
-							args[i] = passwd;
-						}
-					}
-				}
-
-				for(int i = 0; i < args.length; i++) {
-					System.out.println(args[i]);
-				}*/
-
-				outStream.writeObject(user);
-				outStream.writeObject(passwd);
-
-				switch(args[4]) {
-
-				case "-m":
-					outStream.writeObject("-m");
-					// Contact e Message
-					if(args[5] != null && args[6] != null) {
-						Mensagem m = new Mensagem(args[5], args[6]);
-						File f = m.createMessage();
-						outStream.writeObject(args[5]);
-						outStream.writeObject(f.getName());
-						sendFile(f.getName(), outStream);
-					}
-
-					break;
-
-				case "-f":
-					outStream.writeObject("-f");
-
-					if(args[5] != null && args[6] != null) {
-						outStream.writeObject(args[5]);
-						outStream.writeObject(args[6]);
-						sendFile(args[6], outStream);
-					}
-
-					break;
-
-				case "-r":
-					outStream.writeObject("-r");
-
-					if(args[5]!= null && args[6] != null) {
-						outStream.writeObject(args[5]);
-						outStream.writeObject(args[6]);
-
-					}
-					else if(args[5] != null) {
-
-						outStream.writeObject(args[5]);
-
-					}
-
-					else {
-						System.out.println("Most recent");
-					}
-
-					/*
-					String fileName = null;
-
-					try {
-						fileName = (String) inStream.readObject();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					receive(fileName, inStream);
-					 */
-
-					break;
-
-				case "-a":
-					outStream.writeObject("-a");
-
-					if(args[5] != null && args[6] != null) {
-						outStream.writeObject(args[6]);
-						outStream.writeObject(args[5]);
-					}
-
-					break;
-
-				case "-d":
-					outStream.writeObject("-d");
-
-					if(args[5] != null && args[6] != null) {
-						outStream.writeObject(args[6]);
-						outStream.writeObject(args[5]);
-					}
-
-					break;
-
-				default:
-					System.out.println("No viable command issued");
-					break;
+				
 				}
 
 				outStream.close();
@@ -153,7 +57,82 @@ public class myWhats {
 			}
 		}
 	}
+	private static void options(int i,String []args,ObjectOutputStream outStream, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
+		switch(args[4-i]) {
 
+		case "-m":
+			outStream.writeObject("-m");
+			// Contact e Message
+			if(args[5-i] != null && args[6-i] != null) {
+				Mensagem m = new Mensagem(args[5-i], args[6-i]);
+				File f = m.createMessage();
+				outStream.writeObject(args[5-i]);
+				outStream.writeObject(f.getName());
+				sendFile(f.getName(), outStream);
+			}
+
+			break;
+
+		case "-f":
+			outStream.writeObject("-f");
+
+			if(args[5-i] != null && args[6-i] != null) {
+				outStream.writeObject(args[5-i]);
+				outStream.writeObject(args[6-i]);
+				sendFile(args[6-i], outStream);
+			}
+
+			break;
+
+		case "-r":
+			outStream.writeObject("-r");
+
+			if(args[5-i]!= null && args[6-i] != null) {
+				outStream.writeObject(args[5-i]);
+				outStream.writeObject(args[6-i]);
+				// Receber do servidor
+				String name = (String) inStream.readObject();
+				receive(name, inStream);
+
+			}
+			else if(args[5-i] != null) {
+				outStream.writeObject(args[5-i]);
+
+			}
+
+			else {
+				System.out.println("Most recent");
+			}
+
+			break;
+
+		case "-a":
+			outStream.writeObject("-a");
+
+			if(args[5-i] != null && args[6-i] != null) {
+				outStream.writeObject(args[6-i]);
+				outStream.writeObject(args[5-i]);
+			}
+
+			break;
+
+		case "-d":
+			outStream.writeObject("-d");
+
+			if(args[5-i] != null && args[6-i] != null) {
+				outStream.writeObject(args[6-i]);
+				outStream.writeObject(args[5-i]);
+			}
+
+			break;
+
+		default:
+			System.out.println("No viable command issued");
+			break;
+		}
+		
+		
+	}
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
 
 		File toSend = new File(name);
@@ -180,10 +159,11 @@ public class myWhats {
 			}
 		}
 	}
-
+	
 	private static void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		File result = new File(name);
+		
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
@@ -205,7 +185,7 @@ public class myWhats {
 		stream.close();	
 	}
 
-	private void createDir(String contact){
+	private static void createDir(String contact){
 		File theDir = new File(contact);
 		if(!theDir.exists()){
 			System.out.println("Creating directory");
