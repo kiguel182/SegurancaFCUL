@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.Scanner;
 
 
 public class myWhats {
@@ -34,9 +35,29 @@ public class myWhats {
 					user = args[0];
 					passwd = args[3];
 				}
-				else {
-					
+				/*else {
+					System.out.println("Escreva a sua password");
+
+					Scanner sc = new Scanner(System.in);
+					passwd = sc.next();
+					sc.close();
+
+					for(int i = 2; i < args.length + 2; i++){
+						
+						args[i + 2] = args[i];
+						
+						if(i == 2) {
+							args[i] = "-p";
+						}
+						if(i == 3) {
+							args[i] = passwd;
+						}
+					}
 				}
+
+				for(int i = 0; i < args.length; i++) {
+					System.out.println(args[i]);
+				}*/
 
 				outStream.writeObject(user);
 				outStream.writeObject(passwd);
@@ -87,7 +108,7 @@ public class myWhats {
 
 					/*
 					String fileName = null;
-					
+
 					try {
 						fileName = (String) inStream.readObject();
 					} catch (ClassNotFoundException e) {
@@ -183,7 +204,7 @@ public class myWhats {
 		stream.write(fullByteFile);
 		stream.close();	
 	}
-	
+
 	private void createDir(String contact){
 		File theDir = new File(contact);
 		if(!theDir.exists()){
