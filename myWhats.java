@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class myWhats {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-
+		
 		if(args.length <= 0) {
 			System.out.println("Por favor introduza os argumentos necessarios");
 		}
@@ -128,6 +128,7 @@ public class myWhats {
 
 		default:
 			System.out.println("No viable command issued");
+			outStream.writeObject("erro");
 			break;
 		}
 		
