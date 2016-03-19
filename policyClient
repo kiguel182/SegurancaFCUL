@@ -1,6 +1,7 @@
 grant codeBase "file:*" {
 	permission java.net.SocketPermission "*:23456", "connect,resolve";
 	permission java.net.SocketPermission "*:1024-", "accept";
+	permission java.io.FilePermission "/-", "read, write, delete";
+	permission java.io.FilePermission "/Log", "read";
 	
-	permission java.security.AllPermission;
 };
