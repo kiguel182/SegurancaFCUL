@@ -26,7 +26,7 @@ public class Login {
 			try {
 
 				bw = new BufferedWriter(new FileWriter(file,true));
-				if(!existingUser(user,pass,file)){
+				if(!userExists(user,file)){
 					bw.write(user+ ":" + pass);
 					bw.newLine();
 					bw.close();
@@ -35,10 +35,12 @@ public class Login {
 				else if(!wrongPassword(user,pass,file)){
 					//aqui deve verificar que a pass esta errada em fez disso. Ou que esta certa.
 					System.out.println("User and Password correct");
+					bw.close();
 					return true;
 				}
 				else{
 					System.out.println("Incorrect Password");
+					bw.close();
 					return false;
 				}
 
@@ -66,14 +68,14 @@ public class Login {
 		if(user != null && pwd != null) {
 
 			String str = null;
-			//String line = user + ":" + pwd;
+			String line = user + ":" + pwd;
 
 			try {
 
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				while((str = br.readLine())!= null){
 					String[] possibleUser = str.split(":");
-					if(str.equals(possibleUser[0])){
+					if(str.equals(line)){
 						existUser = true;
 						break;
 					}
