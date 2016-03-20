@@ -74,7 +74,6 @@ public class Login {
 
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				while((str = br.readLine())!= null){
-					String[] possibleUser = str.split(":");
 					if(str.equals(line)){
 						existUser = true;
 						break;
