@@ -14,6 +14,7 @@ import java.util.Date;
 class ServerThread extends Thread {
 
 	private Socket socket = null;
+	private boolean autenticated;
 
 	public ServerThread(Socket inSoc) {
 		socket = inSoc;
@@ -37,7 +38,7 @@ class ServerThread extends Thread {
 			}
 
 			Login login = new Login(user, passwd);
-			login.autenthicator(user, passwd);
+			autenticated = login.autenthicator();
 
 			String command = null;
 

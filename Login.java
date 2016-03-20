@@ -16,9 +16,9 @@ public class Login {
 		this.pass = pass;
 	}
 
-	void autenthicator(String user,String passwd) throws IOException{
+	public boolean autenthicator() throws IOException{
 
-		if(user != null && passwd != null) {
+		if(user != null && pass != null) {
 
 			File file = new File("user.txt");
 			BufferedWriter bw;
@@ -26,20 +26,29 @@ public class Login {
 			try {
 
 				bw = new BufferedWriter(new FileWriter(file,true));
-				if(!existingUser(user,passwd,file)){
-					bw.write(user+ ":" + passwd);
+				if(!existingUser(user,pass,file)){
+					bw.write(user+ ":" + pass);
 					bw.newLine();
+					bw.close();
+					return true;
 				}
-				else {
-					System.out.println("User already exists");
+				else if(!wrongPassword(user,pass,file)){
+					//aqui deve verificar que a pass esta errada em fez disso. Ou que esta certa.
+					System.out.println("User and Password correct");
+					return true;
+				}
+				else{
+					System.out.println("Incorrect Password");
+					return false;
 				}
 
-				bw.close();
+				
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
+		return false;
 	}
 	/**
 	 * Verifica que um user com uma password 
@@ -116,8 +125,8 @@ public class Login {
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean wrongPassword(String user, String pwd, File file) throws IOException{
-		return userExists(user,file) && !existingUser(user,pwd,file);
+	public boolean wrongPassword(String user, String pass, File file) throws IOException{
+		return userExists(user,file) && !existingUser(user,pass,file);
 	}
 
 }
