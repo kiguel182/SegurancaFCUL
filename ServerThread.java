@@ -39,7 +39,7 @@ class ServerThread extends Thread {
 
 			Login login = new Login(user, passwd);
 			autenticated = login.autenthicator();
-			
+
 			if(autenticated){
 				String command = null;
 
@@ -55,6 +55,9 @@ class ServerThread extends Thread {
 				case "-m":
 					// Contact e Message
 					try {
+						// Envia confirmaçao se pode ou nao escrever mensagem
+						outStream.writeObject((boolean) autenticated);
+
 						String contact = (String) inStream.readObject();
 						String name = (String) inStream.readObject();
 						receive(user, contact, name, inStream);
@@ -90,31 +93,63 @@ class ServerThread extends Thread {
 					String contact = null;
 					String file = null;
 					Log log = new Log();
+					String whichR = null;
 
 					try {
-						contact = (String) inStream.readObject();
-						file = (String) inStream.readObject();
+						whichR = (String) inStream.readObject();
 
 					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
-					if(contact != null && file !=null) {
-						outStream.writeObject(file);
-						sendFile(contact + File.separator + file, outStream);
-						Log l = new Log();
-						l.writeLog(file, user, contact, timestampCreate(), file);
-					}
+					switch(whichR) {
 
-					else if(contact != null){
-						log.readLogContact(user, contact);
-					}
+					case "r1":
+						try {
+							contact = (String) inStream.readObject();
+							file = (String) inStream.readObject();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
-					else {
-						log.readRecent(user);
+						if(contact != null && file !=null) {
+							outStream.writeObject(file);
+							sendFile(contact + File.separator + file, outStream);
+							Log l = new Log();
+							l.writeLog(file, user, contact, timestampCreate(), file);
+						}
+
+						break;
+
+					case "r2":
+
+						try {
+							contact = (String) inStream.readObject();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						if(contact != null){
+							String s = (String) log.readLogContact(user, contact);
+							outStream.writeObject(s);
+						}
+
+						break;
+
+					case "r3":
+
+						String s = (String) log.readRecent(user);
+						outStream.writeObject(s);
+
+						break;
+
+					default:
+						System.out.println("No R recieved");
+						break;
 					}
-					
 
 					break;
 
@@ -169,14 +204,14 @@ class ServerThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void receive(String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		createDir(contact);
 		File result = new File(contact + File.separator + name);
-		
+
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
@@ -197,18 +232,18 @@ class ServerThread extends Thread {
 		stream.write(fullByteFile);
 		stream.close();	
 	}
-	
+
 	private void receive(String user, String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		Boolean str = createDirMessage(user, contact);
 		File result = null;
-		
+
 		if(str)
 			result = new File(user + "-" + contact + File.separator + name);
 		else 
 			result = new File(contact + "-" + user + File.separator + name);
-		
-		
+
+
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
@@ -273,37 +308,37 @@ class ServerThread extends Thread {
 			theDir.mkdir();
 		}
 	}
-	
+
 	private Boolean createDirMessage(String user, String contact){
 		boolean dirCreated = false;
 		File theUserCon = null;
 		if(new File(contact + "-" + user).exists()){
 			System.out.println("Directoria inversa");
-			
+
 		}
 		else {
 			theUserCon = new File(user + "-" + contact);
 			theUserCon.mkdir();
 			dirCreated = true;
 		}
-		
+
 		return dirCreated;
-		
+
 	}
-	
+
 	private String createString(File file) throws IOException {
-		
+
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		
+
 		String str;
 		while((str = br.readLine())!= null) {
 			// Se houver mais do que 1 linha, ira criar um tab
 			sb.append(str + "\t");
 		}
-		
+
 		return sb.toString();
-		
+
 	}
 
 }

@@ -33,7 +33,6 @@ public class Login {
 					return true;
 				}
 				else if(!wrongPassword(user,pass,file)){
-					//aqui deve verificar que a pass esta errada em fez disso. Ou que esta certa.
 					System.out.println("User and Password correct");
 					bw.close();
 					return true;

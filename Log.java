@@ -126,7 +126,7 @@ public class Log {
 	 * @param requestedUser which log wants to be read
 	 * @throws FileNotFoundException
 	 */
-	public void readLogContact(String user,String requestedUser) throws FileNotFoundException{
+	public String readLogContact(String user,String requestedUser) throws FileNotFoundException{
 
 		File file = new File("Log/"+"log"+requestedUser+".txt");
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -150,7 +150,7 @@ public class Log {
 				}
 				if(str.contains("TimeStamp:")){
 					String strSplit[] = str.split(":");
-					recent.append(strSplit[1]);
+					recent.append(strSplit[1] + ":" + strSplit[2]);
 					recent.append("\n");
 				}					
 			}
@@ -158,7 +158,7 @@ public class Log {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(recent.toString());
+		return recent.toString();
 
 	}
 
@@ -167,7 +167,7 @@ public class Log {
 	 * @param user logged user
 	 * @throws FileNotFoundException
 	 */
-	public void readRecent(String user) throws FileNotFoundException{
+	public String readRecent(String user) throws FileNotFoundException{
 		File fileLog = new File("Log/"+"log"+user+".txt");
 		File fileContact = new File("Log/"+"Comunication"+user+".txt");
 		List<String> logArray = new ArrayList<String>();
@@ -182,8 +182,8 @@ public class Log {
 				if(!str.equals("----------")){	
 					tmp.append(str);
 					if(!str.contains("TimeStamp:"))
-						tmp.append("||");
-
+						tmp.append("|");
+				
 				}
 				else {
 					logArray.add(tmp.toString());
@@ -196,29 +196,63 @@ public class Log {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		Collections.reverse(logArray);
-
+		
 		try {
 			while((str = brContact.readLine())!= null){
-				contactArray.add(str);
+					contactArray.add(str);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	
 		for(int i = 0; i < contactArray.size();i++){
 			for(int j = 0; j < logArray.size();j++){
-				if(logArray.get(j).contains("Contact:"+contactArray.get(i)+"||")){
+				if(logArray.get(j).contains("Contact:"+contactArray.get(i)+"|")){
 					recentLog.add(logArray.get(j));
 					break;
 				}
-
-
+				
+					
 			}
 		}
-
+		
+		String [][]aux = new String[contactArray.size()][3];
+		for(int i = 0; i < contactArray.size();i++){
+			aux[i] = recentLog.get(i).split("\\|");
+		}
+		
+		StringBuilder rLog = new StringBuilder();
+		for(int i = 0; i < aux.length;i++){
+			rLog.append(aux[i][1]);
+			rLog.append("\n");
+			rLog.append(aux(user,aux[i][2]));
+			rLog.append("\n");
+			rLog.append(aux[i][3]);
+			rLog.append("\n");
+		}
+		
+		return rLog.toString();
+		
+	}
+	
+	private String aux(String user,String str){
+		
+		StringBuilder aux = new StringBuilder();
+		
+		if(user.equals(str.split(":")[0].split("-")[1])){
+			aux.append("me:");
+			aux.append(str.split(":")[1]);
+		}
+		else {
+			aux.append(str.split(":")[0].split("-")[1]);
+			aux.append(":");
+			aux.append(str.split(":")[1]);
+		}
+		
+		return aux.toString();
 	}
 
 

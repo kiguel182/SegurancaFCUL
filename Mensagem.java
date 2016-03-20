@@ -17,6 +17,12 @@ public class Mensagem {
 		this.message = message;
 	}
 
+	/**
+	 * Cria uma mensagem 
+	 * 
+	 * @return newFile
+	 * @throws IOException
+	 */
 	public File createMessage() throws IOException {
 
 		File newFile = null;
@@ -37,6 +43,14 @@ public class Mensagem {
 
 	}
 
+	/**
+	 * Verifica se o contact existe no ficheiro .txt
+	 * 
+	 * @param contact
+	 * 			contact a ser verificado
+	 * @return true caso exista, falso caso contrario
+	 * @throws IOException
+	 */
 	public boolean userExists(String contact) throws IOException{
 
 		boolean userExists = false;

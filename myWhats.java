@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class myWhats {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		
+
 		if(args.length <= 0) {
 			System.out.println("Por favor introduza os argumentos necessarios");
 		}
@@ -36,17 +36,17 @@ public class myWhats {
 					outStream.writeObject(passwd);
 					options(0,args,outStream,inStream);
 				}
-				
+
 				else {
 					System.out.println("Escreva a sua password");
 					Scanner sc = new Scanner(System.in);
 					passwd = sc.next();
-					
+
 					outStream.writeObject(user);
 					outStream.writeObject(passwd);
 					options(2,args,outStream,inStream);
 					sc.close();
-				
+
 				}
 
 				outStream.close();
@@ -64,11 +64,20 @@ public class myWhats {
 			outStream.writeObject("-m");
 			// Contact e Message
 			if(args[5-i] != null && args[6-i] != null) {
-				Mensagem m = new Mensagem(args[5-i], args[6-i]);
-				File f = m.createMessage();
-				outStream.writeObject(args[5-i]);
-				outStream.writeObject(f.getName());
-				sendFile(f.getName(), outStream);
+				
+				boolean mess = false;
+				mess = (boolean) inStream.readObject();
+
+				if(mess) {
+					Mensagem m = new Mensagem(args[5-i], args[6-i]);
+					File f = m.createMessage();
+					outStream.writeObject(args[5-i]);
+					outStream.writeObject(f.getName());
+					sendFile(f.getName(), outStream);
+				}
+				else {
+					System.out.println("Autenticacao mal feita");
+				}
 			}
 
 			break;
@@ -87,7 +96,8 @@ public class myWhats {
 		case "-r":
 			outStream.writeObject("-r");
 
-			if(args[5-i]!= null && args[6-i] != null) {
+			if(args.length == (7-i)) {
+				outStream.writeObject("r1");
 				outStream.writeObject(args[5-i]);
 				outStream.writeObject(args[6-i]);
 				// Receber do servidor
@@ -95,13 +105,19 @@ public class myWhats {
 				receive(name, inStream);
 
 			}
-			else if(args[5-i] != null) {
+			else if(args.length == (6-i)) {
+				outStream.writeObject("r2");
 				outStream.writeObject(args[5-i]);
-
+				
+				String s = (String) inStream.readObject();
+				System.out.println(s);
 			}
 
-			else {
-				System.out.println("Most recent");
+			else if(args.length == (5-i)){
+				outStream.writeObject("r3");
+				
+				String s = (String) inStream.readObject();
+				System.out.println(s);
 			}
 
 			break;
@@ -131,8 +147,8 @@ public class myWhats {
 			outStream.writeObject("erro");
 			break;
 		}
-		
-		
+
+
 	}
 	private static void sendFile(String name, ObjectOutputStream out) throws IOException{
 
@@ -160,11 +176,11 @@ public class myWhats {
 			}
 		}
 	}
-	
+
 	private static void receive(String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
 		File result = new File(name);
-		
+
 		int fileArraySize = inStream.readInt();
 		byte[] fullByteFile = new byte[fileArraySize];
 		int ciclos = fileArraySize/1024;
@@ -184,13 +200,5 @@ public class myWhats {
 		FileOutputStream stream = new FileOutputStream(result);
 		stream.write(fullByteFile);
 		stream.close();	
-	}
-
-	private static void createDir(String contact){
-		File theDir = new File(contact);
-		if(!theDir.exists()){
-			System.out.println("Creating directory");
-			theDir.mkdir();
-		}
 	}
 }
