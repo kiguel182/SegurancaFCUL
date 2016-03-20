@@ -61,19 +61,19 @@ public class Login {
 	 */
 	private boolean existingUser(String user, String pwd,File file) throws IOException {
 
-
 		boolean existUser = false;
 
 		if(user != null && pwd != null) {
 
 			String str = null;
-			String line = user + ":" + pwd;
+			//String line = user + ":" + pwd;
 
 			try {
 
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				while((str = br.readLine())!= null){
-					if(str.equals(line)){
+					String[] possibleUser = str.split(":");
+					if(str.equals(possibleUser[0])){
 						existUser = true;
 						break;
 					}

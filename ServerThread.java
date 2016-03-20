@@ -39,123 +39,128 @@ class ServerThread extends Thread {
 
 			Login login = new Login(user, passwd);
 			autenticated = login.autenthicator();
+			
+			if(autenticated){
+				String command = null;
 
-			String command = null;
+				try {
+					command = (String)inStream.readObject();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-			try {
-				command = (String)inStream.readObject();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				switch(command) {
+
+				case "-m":
+					// Contact e Message
+					try {
+						String contact = (String) inStream.readObject();
+						String name = (String) inStream.readObject();
+						receive(user, contact, name, inStream);
+						Log l = new Log();
+						String m = createString(new File(user + "-" + contact + File.separator + name));
+						l.writeLog(name, user, contact, timestampCreate(), m);
+
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+
+				case "-f":
+
+					try {
+						String contact = (String) inStream.readObject();
+						String file = (String) inStream.readObject();
+						receive(contact, file, inStream);
+						Log l = new Log();
+						l.writeLog(file, user, contact, timestampCreate(), file);
+
+					} catch (ClassNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+
+					break;
+
+				case "-r":
+
+					String contact = null;
+					String file = null;
+					Log log = new Log();
+
+					try {
+						contact = (String) inStream.readObject();
+						file = (String) inStream.readObject();
+
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					if(contact != null && file !=null) {
+						outStream.writeObject(file);
+						sendFile(contact + File.separator + file, outStream);
+						Log l = new Log();
+						l.writeLog(file, user, contact, timestampCreate(), file);
+					}
+
+					else if(contact != null){
+						log.readLogContact(user, contact);
+					}
+
+					else {
+						log.readRecent(user);
+					}
+					
+
+					break;
+
+				case "-a":
+
+					try {
+						String groupNameAdd = (String)inStream.readObject();
+						String contactAdd = (String)inStream.readObject();
+
+						Group gAdd = new Group(groupNameAdd, user);
+						gAdd.createGroup(groupNameAdd, user);
+						createDir(groupNameAdd);
+						gAdd.addUser(groupNameAdd, user, contactAdd);	
+
+
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+
+				case "-d":
+
+					try {
+						String groupNameDel = (String)inStream.readObject();
+						String contactDel = (String) inStream.readObject();
+
+						Group gDel = new Group(groupNameDel, user);
+						gDel.deleteUser(groupNameDel, user, contactDel);
+
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+
+				default:
+					System.out.println("No viable command issued");
+					break;
+				}
 			}
-
-			switch(command) {
-
-			case "-m":
-				// Contact e Message
-				try {
-					String contact = (String) inStream.readObject();
-					String name = (String) inStream.readObject();
-					receive(user, contact, name, inStream);
-					Log l = new Log();
-					String m = createString(new File(user + "-" + contact + File.separator + name));
-					l.writeLog(name, user, contact, timestampCreate(), m);
-
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				break;
-
-			case "-f":
-
-				try {
-					String contact = (String) inStream.readObject();
-					String file = (String) inStream.readObject();
-					receive(contact, file, inStream);
-					Log l = new Log();
-					l.writeLog(file, user, contact, timestampCreate(), file);
-
-				} catch (ClassNotFoundException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-
-				break;
-
-			case "-r":
-
-				String contact = null;
-				String file = null;
-				Log log = new Log();
-
-				try {
-					contact = (String) inStream.readObject();
-					file = (String) inStream.readObject();
-
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				if(contact != null && file !=null) {
-					outStream.writeObject(file);
-					sendFile(contact + File.separator + file, outStream);
-					Log l = new Log();
-					l.writeLog(file, user, contact, timestampCreate(), file);
-				}
-
-				else if(contact != null){
-					log.readLogContact(user, contact);
-				}
-
-				else {
-					log.readRecent(user);
-				}
-				
-
-				break;
-
-			case "-a":
-
-				try {
-					String groupNameAdd = (String)inStream.readObject();
-					String contactAdd = (String)inStream.readObject();
-
-					Group gAdd = new Group(groupNameAdd, user);
-					gAdd.createGroup(groupNameAdd, user);
-					createDir(groupNameAdd);
-					gAdd.addUser(groupNameAdd, user, contactAdd);	
-
-
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				break;
-
-			case "-d":
-
-				try {
-					String groupNameDel = (String)inStream.readObject();
-					String contactDel = (String) inStream.readObject();
-
-					Group gDel = new Group(groupNameDel, user);
-					gDel.deleteUser(groupNameDel, user, contactDel);
-
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				break;
-
-			default:
-				System.out.println("No viable command issued");
-				break;
-			}	
+			else{
+				System.out.println("Wrong password");
+			}
 
 			outStream.close();
 			inStream.close();
@@ -164,6 +169,7 @@ class ServerThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	private void receive(String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
