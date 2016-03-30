@@ -57,6 +57,7 @@ public class myWhats {
 			}
 		}
 	}
+
 	private static void options(int i,String []args,ObjectOutputStream outStream, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		switch(args[4-i]) {
 
@@ -64,7 +65,7 @@ public class myWhats {
 			outStream.writeObject("-m");
 			// Contact e Message
 			if(args[5-i] != null && args[6-i] != null) {
-				
+
 				boolean mess = false;
 				mess = (boolean) inStream.readObject();
 
@@ -108,14 +109,14 @@ public class myWhats {
 			else if(args.length == (6-i)) {
 				outStream.writeObject("r2");
 				outStream.writeObject(args[5-i]);
-				
+
 				String s = (String) inStream.readObject();
 				System.out.println(s);
 			}
 
 			else if(args.length == (5-i)){
 				outStream.writeObject("r3");
-				
+
 				String s = (String) inStream.readObject();
 				System.out.println(s);
 			}

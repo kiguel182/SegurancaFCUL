@@ -27,7 +27,7 @@ public class Mensagem {
 
 		File newFile = null;
 		
-		if(userExists(this.contact) && this.message != null) {
+		if((userExists(this.contact) && this.message != null) || (checkGroup(this.contact) && this.message!=null)) {
 			
 			Date now = new Date();
 
@@ -73,6 +73,18 @@ public class Mensagem {
 
 		return userExists;
 
+	}
+	
+	private boolean checkGroup(String contact) {
+
+		boolean isGroup = false;
+		File file = new File("Group" + File.separator + contact);
+
+		if(file.exists()) {
+			isGroup = true;
+		}
+
+		return isGroup;
 	}
 
 }

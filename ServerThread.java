@@ -60,9 +60,24 @@ class ServerThread extends Thread {
 
 						String contact = (String) inStream.readObject();
 						String name = (String) inStream.readObject();
-						receive(user, contact, name, inStream);
+						String m = null;
+						
+						createDir("Group");
+						createDir("Mensagem");
+						
+						if(checkGroup(contact)) {
+							createDir(contact);
+							receive("Group" + File.separator + contact, name, inStream);
+							m = createString(new File("Group" + File.separator + contact + File.separator + name));
+						}
+						
+						else  {
+							receive("Mensagem" + File.separator + user, contact, name, inStream);
+							m = createString(new File("Mensagem" + File.separator + user + "-" + contact + File.separator + name));
+						}
+
+
 						Log l = new Log();
-						String m = createString(new File(user + "-" + contact + File.separator + name));
 						l.writeLog(name, user, contact, timestampCreate(), m);
 
 					} catch (ClassNotFoundException e) {
@@ -77,7 +92,8 @@ class ServerThread extends Thread {
 					try {
 						String contact = (String) inStream.readObject();
 						String file = (String) inStream.readObject();
-						receive(contact, file, inStream);
+						createDir("Files");
+						receive("Files" + File.separator + contact, file, inStream);
 						Log l = new Log();
 						l.writeLog(file, user, contact, timestampCreate(), file);
 
@@ -116,7 +132,7 @@ class ServerThread extends Thread {
 
 						if(contact != null && file !=null) {
 							outStream.writeObject(file);
-							sendFile(contact + File.separator + file, outStream);
+							sendFile("Files" + File.separator + contact + File.separator + file, outStream);
 							Log l = new Log();
 							l.writeLog(file, user, contact, timestampCreate(), file);
 						}
@@ -158,10 +174,10 @@ class ServerThread extends Thread {
 					try {
 						String groupNameAdd = (String)inStream.readObject();
 						String contactAdd = (String)inStream.readObject();
-
 						Group gAdd = new Group(groupNameAdd, user);
 						gAdd.createGroup(groupNameAdd, user);
-						createDir(groupNameAdd);
+						createDir("Group");
+						createDir("Group" + File.separator + groupNameAdd);
 						gAdd.addUser(groupNameAdd, user, contactAdd);	
 
 
@@ -209,7 +225,9 @@ class ServerThread extends Thread {
 
 	private void receive(String contact, String name, ObjectInputStream inStream) throws IOException, ClassNotFoundException{
 		//vai ter de receber nome primeiro antes de criar o ficheiro
+		System.out.println(contact);
 		createDir(contact);
+
 		File result = new File(contact + File.separator + name);
 
 		int fileArraySize = inStream.readInt();
@@ -337,8 +355,21 @@ class ServerThread extends Thread {
 			sb.append(str + "\t");
 		}
 
+		br.close();
 		return sb.toString();
 
+	}
+
+	private boolean checkGroup(String contact) {
+
+		boolean isGroup = false;
+		File file = new File("Group" + File.separator + contact);
+
+		if(file.exists()) {
+			isGroup = true;
+		}
+
+		return isGroup;
 	}
 
 }
